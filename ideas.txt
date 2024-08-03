@@ -1,0 +1,6 @@
+Graph:
+- show price (adj close / close) (RM)
+- x axis, data, y axis price
+- date range (1 month usually)
+
+- see difference companies in the same graph
