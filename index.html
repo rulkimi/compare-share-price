@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annual Return Calculator</title>
+</head>
+<body>
+  <input id="total-asset" type="text" placeholder="Total Assets">
+  <input id="annual-return-rate" type="text" placeholder="Annual Return Rate (%)">
+  <input id="annual-return" type="text" placeholder="Annual Return">
+  <button onclick="getAnnualReturn()">Calculate</button>
+
+  <script>
+    const getAnnualReturn = () => {
+      // Get values from input fields
+      const totalAsset = parseFloat(document.getElementById('total-asset').value) || 0;
+      let annualReturnRate = parseFloat(document.getElementById('annual-return-rate').value) || 0;
+      let annualReturn = parseFloat(document.getElementById('annual-return').value) || 0;
+
+      if (annualReturnRate && totalAsset) {
+        // Calculate annual return when annual return rate is provided
+        annualReturn = totalAsset * (annualReturnRate / 100);
+      } else if (annualReturn && totalAsset) {
+        // Calculate annual return rate when annual return is provided
+        annualReturnRate = (annualReturn / totalAsset) * 100;
+        document.getElementById('annual-return-rate').value = annualReturnRate.toFixed(2);
+      }
+      
+      // Set the result in the annual return input field
+      document.getElementById('annual-return').value = annualReturn.toFixed(2);
+    }
+  </script>
+</body>
+</html>
