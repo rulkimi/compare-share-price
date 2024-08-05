@@ -1,9 +1,25 @@
 import yfinance as yf
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 
 app = FastAPI()
+
+# Define the list of allowed origins (you can add more if needed)
+origins = [
+    "http://localhost",
+    "http://localhost:5173",
+]
+
+# Add CORS middleware to the app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Allow specific origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 def get_company_info(company_ticker: str):
     ticker = yf.Ticker(company_ticker)
