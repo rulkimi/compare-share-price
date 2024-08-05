@@ -13,11 +13,11 @@ export default {
     const dummyDps = [];
 
     msftData.forEach(data => {
-      msftDps.push({ x: new Date(data["date"]), y: data["close"] });
+      msftDps.push({ x: new Date(data["date"]), y: [data["open"], data["high"], data["low"], data["close"]] });
     });
 
     dummyData.forEach(data => {
-      dummyDps.push({ x: new Date(data["date"]), y: data["close"] });
+      dummyDps.push({ x: new Date(data["date"]), y: [data["open"], data["high"], data["low"], data["close"]] });
     });
 
     return {
@@ -29,7 +29,7 @@ export default {
           text: "Vue.js StockChart with Date-Time Axis"
         },
         subtitles: [{
-          text: "MSFT and Dummy Data Stock Prices"
+          text: "MSFT Stock Price"
         }],
         charts: [{
           axisY: {
@@ -39,18 +39,16 @@ export default {
           },
           data: [
             {
-              type: "line",
-              name: "MSFT Close Price",
+              type: "candlestick",
+              name: "MSFT Price (in USD)",
               yValueFormatString: "$#,###.##",
-              dataPoints: msftDps,
-              lineColor: "#4F81BC" // Set color for MSFT line
+              dataPoints: msftDps
             },
             {
-              type: "line",
-              name: "Dummy Data Close Price",
+              type: "candlestick",
+              name: "Dummy Data Price (in USD)",
               yValueFormatString: "$#,###.##",
-              dataPoints: dummyDps,
-              lineColor: "#C0504E" // Set color for Dummy Data line
+              dataPoints: dummyDps
             }
           ]
         }],
