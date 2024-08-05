@@ -1,4 +1,0 @@
-<template>
-  <StockChart />
-</template>
-
