@@ -11,13 +11,17 @@ export default {
   data() {
     const msftDps = [];
     const dummyDps = [];
+    const msftDps2 = [];
+    const dummyDps2 = [];
 
     msftData.forEach(data => {
       msftDps.push({ x: new Date(data["date"]), y: [data["open"], data["high"], data["low"], data["close"]] });
+      msftDps2.push({ x: new Date(data["date"]), y: data["close"] });
     });
 
     dummyData.forEach(data => {
       dummyDps.push({ x: new Date(data["date"]), y: [data["open"], data["high"], data["low"], data["close"]] });
+      dummyDps2.push({ x: new Date(data["date"]), y: data["close"] });
     });
 
     return {
@@ -53,9 +57,20 @@ export default {
           ]
         }],
         navigator: {
-          data: [{
-            dataPoints: [...msftDps, ...dummyDps]
-          }],
+          data: [
+            {
+              type: "line",
+              name: "MSFT",
+              color: "blue",
+              dataPoints: msftDps2
+            },
+            {
+              type: "line",
+              name: "Dummy Data",
+              color: "red",
+              dataPoints: dummyDps2
+            }
+          ],
           slider: {
             minimum: new Date(2020, 0, 1),
             maximum: new Date(2020, 11, 1)
