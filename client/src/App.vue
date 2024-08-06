@@ -1,39 +1,40 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import StockChart from './components/StockChart.vue';
 import axios from 'axios';
 
-const msftData = ref([]);
-const appleData = ref([]);
+const stockData = ref([]);
+const tickerCode = ref('');
+const startDate = ref('2020-01-01');
+const endDate = ref('2020-09-02');
 
-onMounted(() => {
-  getSharePrice('AAPL');
-  getSharePrice('MSFT');
-});
-
-const getSharePrice = async (tickerCode) => {
+const getSharePrice = async () => {
   try {
-    const response = await axios.get(`http://localhost:8000/share_price/${tickerCode}`, {
+    const response = await axios.get(`http://localhost:8000/share_price/${tickerCode.value}`, {
       params: {
-        start_date: '2020-01-01',
-        end_date: '2020-09-02'
+        start_date: startDate.value,
+        end_date: endDate.value
       }
     });
     const { data } = response;
-    
-    if (tickerCode === 'AAPL') {
-      appleData.value = data;
-    } else if (tickerCode === 'MSFT') {
-      msftData.value = data;
-    }
+    stockData.value.push(data);
   } catch (error) {
-    console.error(`Error fetching share price for ${tickerCode}:`, error);
+    console.error(`Error fetching share price for ${tickerCode.value}:`, error);
   }
 };
 </script>
 
 <template>
-  <div class="border rounded-lg p-4">
-    <StockChart :stock-data="[msftData, appleData]" />
+  <div class="grid grid-cols-4 gap-2 h-[40px] mb-4">
+    <input v-model="tickerCode" placeholder="ticker symbol" type="text" class="border w-full rounded-lg p-2 outline-none col-span-1">
+    <input v-model="startDate" type="date" class="border w-full rounded-lg p-2 outline-none col-span-1">
+    <input v-model="endDate" type="date" class="border w-full rounded-lg p-2 outline-none col-span-1">
+    <button
+      class="border bg-blue-500 text-white rounded-lg px-3 py-2 col-span-1"
+      @click="getSharePrice"
+    >+ Add to Chart</button>
+  </div>
+  <div v-if="stockData.length" class="border rounded-lg p-4">
+    <StockChart :stock-data="stockData" />
   </div>
 </template>

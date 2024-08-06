@@ -44,7 +44,7 @@ const options = computed(() => {
 
   return {
     exportEnabled: true,
-    theme: "light2",
+    theme: "light1",
     subtitles: [{
       text: "Stock Price"
     }],
