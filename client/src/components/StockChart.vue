@@ -51,9 +51,6 @@ const dummyDps2 = computed(() =>
 const options = computed(() => ({
   exportEnabled: true,
   theme: "light2",
-  title: {
-    text: "Vue.js StockChart with Date-Time Axis"
-  },
   subtitles: [{
     text: "MSFT Stock Price"
   }],
@@ -102,6 +99,6 @@ const options = computed(() => ({
 
 const styleOptions = {
   width: "100%",
-  height: "460px"
+  height: "700px"
 };
 </script>
