@@ -9,8 +9,9 @@ const startDate = ref('2020-01-01');
 const endDate = ref('2020-09-02');
 
 const getSharePrice = async () => {
+  const code = tickerCode.value.toUpperCase();
   try {
-    const response = await axios.get(`http://localhost:8000/share_price/${tickerCode.value}`, {
+    const response = await axios.get(`http://localhost:8000/share_price/${code}`, {
       params: {
         start_date: startDate.value,
         end_date: endDate.value
@@ -19,14 +20,20 @@ const getSharePrice = async () => {
     const { data } = response;
     stockData.value.push(data);
   } catch (error) {
-    console.error(`Error fetching share price for ${tickerCode.value}:`, error);
+    console.error(`Error fetching share price for ${code}:`, error);
   }
 };
 </script>
 
 <template>
   <div class="grid grid-cols-4 gap-2 h-[40px] mb-4">
-    <input v-model="tickerCode" placeholder="ticker symbol" type="text" class="border w-full rounded-lg p-2 outline-none col-span-1">
+    <input
+      v-model="tickerCode"
+      placeholder="ticker symbol"
+      type="text"
+      class="border w-full rounded-lg p-2 outline-none col-span-1"
+      @keydown.enter="getSharePrice"
+    >
     <input v-model="startDate" type="date" class="border w-full rounded-lg p-2 outline-none col-span-1">
     <input v-model="endDate" type="date" class="border w-full rounded-lg p-2 outline-none col-span-1">
     <button
