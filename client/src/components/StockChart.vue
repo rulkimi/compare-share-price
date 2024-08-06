@@ -5,97 +5,66 @@
 <script setup>
 import { computed } from 'vue';
 import { toRefs } from 'vue';
-import { defineProps } from 'vue';
 
 const props = defineProps({
-  msftData: {
-    type: Array,
-    required: true
-  },
-  appleData: {
+  stockData: {
     type: Array,
     required: true
   }
 });
 
-const { msftData, appleData } = toRefs(props);
+const { stockData } = toRefs(props);
 
-const msftDps = computed(() => 
-  msftData.value.map(data => ({
-    x: new Date(data["Date"]),
-    y: [data["Open"], data["High"], data["Low"], data["Close"]]
-  }))
-);
+const getDataPoints = (data, type) => 
+  data.map(item => ({
+    x: new Date(item["Date"]),
+    y: type === "candlestick" ? [item["Open"], item["High"], item["Low"], item["Close"]] : item["Close"]
+  }));
 
-const msftDps2 = computed(() => 
-  msftData.value.map(data => ({
-    x: new Date(data["Date"]),
-    y: data["Close"]
-  }))
-);
+const options = computed(() => {
+  const chartData = [];
+  const navigatorData = [];
 
-const dummyDps = computed(() => 
-  appleData.value.map(data => ({
-    x: new Date(data["Date"]),
-    y: [data["Open"], data["High"], data["Low"], data["Close"]]
-  }))
-);
+  stockData.value.forEach((data, index) => {
+    const datasetName = `Dataset ${index + 1}`;
+    chartData.push({
+      type: "candlestick",
+      name: `${datasetName} Price (in USD)`,
+      yValueFormatString: "$#,###.##",
+      dataPoints: getDataPoints(data, "candlestick")
+    });
 
-const dummyDps2 = computed(() => 
-  appleData.value.map(data => ({
-    x: new Date(data["Date"]),
-    y: data["Close"]
-  }))
-);
+    navigatorData.push({
+      type: "line",
+      name: datasetName,
+      color: index % 2 === 0 ? "blue" : "red", // Alternate colors
+      dataPoints: getDataPoints(data, "line")
+    });
+  });
 
-const options = computed(() => ({
-  exportEnabled: true,
-  theme: "light2",
-  subtitles: [{
-    text: "MSFT Stock Price"
-  }],
-  charts: [{
-    axisY: {
-      title: "Price",
-      prefix: "$",
-      tickLength: 0
-    },
-    data: [
-      {
-        type: "candlestick",
-        name: "MSFT Price (in USD)",
-        yValueFormatString: "$#,###.##",
-        dataPoints: msftDps.value
+  return {
+    exportEnabled: true,
+    theme: "light2",
+    subtitles: [{
+      text: "Stock Price"
+    }],
+    charts: [{
+      axisY: {
+        title: "Price",
+        prefix: "$",
+        tickLength: 0
       },
-      {
-        type: "candlestick",
-        name: "Dummy Data Price (in USD)",
-        yValueFormatString: "$#,###.##",
-        dataPoints: dummyDps.value
+      data: chartData
+    }],
+    navigator: {
+      data: navigatorData,
+      slider: {
+        minimum: new Date(2020, 0, 1),
+        maximum: new Date(2020, 11, 1)
       }
-    ]
-  }],
-  navigator: {
-    data: [
-      {
-        type: "line",
-        name: "MSFT",
-        color: "blue",
-        dataPoints: msftDps2.value
-      },
-      {
-        type: "line",
-        name: "Dummy Data",
-        color: "red",
-        dataPoints: dummyDps2.value
-      }
-    ],
-    slider: {
-      minimum: new Date(2020, 0, 1),
-      maximum: new Date(2020, 11, 1)
     }
-  }
-}));
+  };
+});
 
 const styleOptions = {
   width: "100%",

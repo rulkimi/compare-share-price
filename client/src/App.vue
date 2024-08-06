@@ -34,6 +34,6 @@ const getSharePrice = async (tickerCode) => {
 
 <template>
   <div class="border rounded-lg p-4">
-    <StockChart :msft-data="msftData" :apple-data="appleData" />
+    <StockChart :stock-data="[msftData, appleData]" />
   </div>
 </template>
