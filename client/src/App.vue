@@ -4,6 +4,7 @@ import StockChart from './components/StockChart.vue';
 import axios from 'axios';
 
 const stockData = ref([]);
+const codes = ref([]);
 const tickerCode = ref('');
 const startDate = ref('2020-01-01');
 const endDate = ref('2020-09-02');
@@ -19,10 +20,17 @@ const getSharePrice = async () => {
     });
     const { data } = response;
     stockData.value.push(data);
+    codes.value.push(code);
+    tickerCode.value = '';
   } catch (error) {
     console.error(`Error fetching share price for ${code}:`, error);
   }
 };
+
+const removeCode = index => {
+  codes.value.splice(index, 1);
+  stockData.value.splice(index, 1);
+}
 </script>
 
 <template>
@@ -40,6 +48,24 @@ const getSharePrice = async () => {
       class="border bg-blue-500 text-white rounded-lg px-3 py-2 col-span-1"
       @click="getSharePrice"
     >+ Add to Chart</button>
+  </div>
+  <div class="flex gap-2 mb-4">
+    <div
+      v-for="(code, index) in codes"
+      :key="code"
+      class="bg-gray-100 px-3 py-2 rounded-lg"
+    >
+      <div class="flex gap-2">
+        {{ code }}
+        <img
+          class="cursor-pointer transition-transform duration-200 hover:scale-110"
+          src="./assets/times.svg"
+          alt="remove code"
+          width="24"
+          @click="removeCode(index)"
+        >
+      </div>
+    </div>
   </div>
   <div v-if="stockData.length" class="border rounded-lg p-4">
     <StockChart :stock-data="stockData" />
