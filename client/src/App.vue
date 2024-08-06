@@ -49,7 +49,7 @@ const removeCode = index => {
       @click="getSharePrice"
     >+ Add to Chart</button>
   </div>
-  <div class="flex gap-2 mb-4">
+  <transition-group name="codes" tag="div" class="flex gap-2 relative mb-4">
     <div
       v-for="(code, index) in codes"
       :key="code"
@@ -66,8 +66,20 @@ const removeCode = index => {
         >
       </div>
     </div>
-  </div>
+  </transition-group>
   <div v-if="stockData.length" class="border rounded-lg p-4">
     <StockChart :stock-data="stockData" />
   </div>
 </template>
+
+<style scoped>
+.codes-enter-from, .codes-leave-to {
+  opacity: 0;
+}
+.codes-leave-active, .codes-enter-active, .codes-move {
+  transition: all 0.3s ease-in-out;
+}
+.codes-leave-active {
+  position: absolute;
+}
+</style>
