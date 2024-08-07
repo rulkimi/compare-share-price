@@ -6,8 +6,13 @@ import axios from 'axios';
 const stockData = ref([]);
 const codes = ref([]);
 const tickerCode = ref('');
-const startDate = ref('2020-01-01');
-const endDate = ref('2020-09-02');
+const startDate = ref('2024-01-01');
+const endDate = ref('2024-06-02');
+
+onMounted(() => {
+  tickerCode.value = 'AAPL';
+  getSharePrice();
+})
 
 const getSharePrice = async () => {
   const code = tickerCode.value.toUpperCase();
